@@ -1,0 +1,95 @@
+### Step 1: Load the data
+
+First, we'll load the Titanic dataset.
+
+```python
+import pandas as pd
+
+# Load the dataset
+url = 'https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv'
+df = pd.read_csv(url)
+
+# Display the first few rows of the dataset
+df.head()
+```
+
+### Step 2: Inspect the data
+
+Let's inspect the dataset to understand its structure and identify any missing values.
+
+```python
+# Display basic information about the dataset
+df.info()
+
+# Display summary statistics
+df.describe()
+```
+
+### Step 3: Handle missing values
+
+We'll handle missing values by imputing or dropping them as appropriate.
+
+```python
+# Check for missing values
+missing_values = df.isnull().sum()
+print(missing_values)
+
+# Fill missing values in the 'Age' column with the median age
+df['Age'].fillna(df['Age'].median(), inplace=True)
+
+# Fill missing values in the 'Embarked' column with the mode
+df['Embarked'].fillna(df['Embarked'].mode()[0], inplace=True)
+
+# Drop the 'Cabin' column as it has too many missing values
+df.drop(columns=['Cabin'], inplace=True)
+
+# Drop rows with any remaining missing values
+df.dropna(inplace=True)
+```
+
+### Step 4: Analyze and visualize relationships between variables
+
+We'll explore relationships between key variables using visualizations.
+
+#### Survival Rate by Gender
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Plot survival rate by gender
+sns.countplot(x='Sex', hue='Survived', data=df)
+plt.title('Survival Rate by Gender')
+plt.show()
+```
+
+#### Survival Rate by Passenger Class
+
+```python
+# Plot survival rate by passenger class
+sns.countplot(x='Pclass', hue='Survived', data=df)
+plt.title('Survival Rate by Passenger Class')
+plt.show()
+```
+
+#### Age Distribution of Survivors and Non-Survivors
+
+```python
+# Plot age distribution of survivors and non-survivors
+sns.histplot(data=df, x='Age', hue='Survived', multiple='stack')
+plt.title('Age Distribution of Survivors and Non-Survivors')
+plt.show()
+```
+
+#### Correlation Heatmap
+
+```python
+# Compute the correlation matrix
+corr_matrix = df.corr()
+
+# Plot the heatmap
+plt.figure(figsize=(10, 8))
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', linewidths=0.5)
+plt.title('Correlation Heatmap')
+plt.show()
+```
